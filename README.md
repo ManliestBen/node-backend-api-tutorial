@@ -149,8 +149,65 @@ function create(req, res) {
 ![post request](public/images/postrequest.png)
 ## Now, send a get request to http://localhost:3000/api/tacos and make sure it was added properly to the database:
 ![get request](public/images/getrequest.png)
-
-
+## Now we need to add a route for showing an individual taco:
+```js
+router.get('/tacos/:id', tacosCtrl.show);
+```
+## ...and write the function in the controller:
+```js
+function show(req, res){
+    Taco.findById(req.params.id)
+    .then(function(taco){
+        res.status(200).json(taco);
+    })
+    .catch(function(err) {
+        res.status(500).json(err);
+    })
+}
+```
+## Test it out in Postman using the _id of one of the entries in the database:
+![show request](public/images/showrequest.png)
+## Next, we'll add the update route:
+```js
+router.put('/tacos/:id', tacosCtrl.update);
+```
+## ...and write the controller function:
+```js
+function update(req, res){
+    Taco.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    .then(function(taco){
+        res.status(200).json(taco)
+    })
+    .catch(function(err) {
+        res.status(500).json(err);
+    })
+}
+```
+## Once again, test it out by making a put request with the desired changes in the body:
+![put request test](public/images/putrequest1.png)
+## ...then verify that the changes were made by sending a get request to the index route:
+![put request verification](public/images/putrequest2.png)
+## All that's left is delete functionality.  Start with the route:
+```js
+router.delete('/tacos/:id', tacosCtrl.delete);
+```
+## ...then the controller function:
+```js
+function deleteOne(req, res){
+    Taco.findByIdAndRemove(req.params.id)
+    .then(function(taco){
+        res.status(200).json(taco);
+    })
+    .catch(function(err) {
+        res.status(500).json(err);
+    })
+}
+```
+## Test it out using Postman:
+![delete request](public/images/deleterequest.png)
+## And verify with a get request to the index:
+![verify delete](public/images/verifydelete.png)
+## Congratulations, you now have a backend server capable of performing full CRUD!
 
 
 
