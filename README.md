@@ -93,6 +93,64 @@ var tacoSchema = new Schema({
 
 module.exports = mongoose.model('Taco', tacoSchema);
 ```
+## Now that we have our model, we need to configure our routes and controller:
+```
+mkdir controllers
+touch controllers/tacos.js
+```
+## Set up the basics for the controller:
+```js
+const Taco = require('../models/taco');
+
+module.exports = {
+}
+```
+## Add the controller to the api.js routes file and set up simple routes to create and index our tacos:
+```js
+var express = require('express');
+var router = express.Router();
+var tacosCtrl = require('../controllers/tacos');
+
+router.get('/tacos', tacosCtrl.index);
+router.post('/tacos', tacosCtrl.create);
+
+module.exports = router;
+```
+## Next, write the index and create functions in the controller:
+```js
+const Taco = require('../models/taco');
+
+module.exports = {
+    index,
+    create
+}
+
+function index(req, res) {
+    Taco.find({})
+    .then(function(tacos){
+        res.status(200).json(tacos);
+    })
+    .catch(function(err) {
+        res.status(500).json(err);
+    })
+}
+
+function create(req, res) {
+    Taco.create(req.body)
+    .then(function(taco){
+        res.status(201).json(taco);
+    })
+    .catch(function(err) {
+        res.status(500).json(err);
+    })
+}
+```
+## We've got two basic routes functioning, so let's go test them out in Postman.  Send a post request to http://localhost:3000/api/tacos and put a JSON object in the body of the request using the same format as the model:
+![post request](public/images/postrequest.png)
+## Now, send a get request to http://localhost:3000/api/tacos and make sure it was added properly to the database:
+![get request](public/images/getrequest.png)
+
+
 
 
 

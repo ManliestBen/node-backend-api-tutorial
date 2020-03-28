@@ -1,9 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var tacosCtrl = require('../controllers/tacos');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/tacos', tacosCtrl.index);
+router.post('/tacos', tacosCtrl.create);
 
 module.exports = router;
